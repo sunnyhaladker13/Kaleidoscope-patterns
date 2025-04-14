@@ -108,6 +108,9 @@ function draw() {
   // Apply enhanced removal of old trail points with smoother fade
   let currentTime = millis();
   positions = positions.filter(p => currentTime - p.t < 2000); // Reduced from 3000 for shorter persistence
+  
+  // Display signature at bottom
+  displaySignature();
 }
 
 function drawMirrored(input, hue, shapeType) {
@@ -349,4 +352,56 @@ function touchEnded() {
   // when touching somewhere else
   positions = [];
   return false;
+}
+
+// Function to display signature text
+function displaySignature() {
+  push();
+  textAlign(CENTER, BOTTOM);
+  textSize(14);
+  
+  // Define light grey color for both text and button
+  let lightGreyColor = color(240, 240, 240, 200);
+  
+  // Draw the text in two parts
+  fill(lightGreyColor);
+  noStroke();
+  text("Made with ❤️ by Sunny", width/2 - 70, height - 20);
+  
+  // Draw button-like background for LinkedIn part
+  let linkedinX = width/2 + 70;
+  let buttonWidth = 140;
+  let buttonHeight = 26;
+  let isHovering = mouseY > height - buttonHeight - 15 && 
+                   mouseY < height - 15 && 
+                   mouseX > linkedinX - buttonWidth/2 && 
+                   mouseX < linkedinX + buttonWidth/2;
+  
+  // Button styling with hover effect - outline only
+  rectMode(CENTER);
+  noFill();
+  strokeWeight(1.5);
+  
+  if (isHovering) {
+    stroke(lightGreyColor); // Use same color but full opacity on hover
+    cursor(HAND);
+  } else {
+    stroke(240, 240, 240, 150); // Slightly more transparent when not hovering
+    cursor(AUTO);
+  }
+  
+  // Draw outlined rounded button
+  rect(linkedinX, height - 27, buttonWidth, buttonHeight, 12);
+  
+  // LinkedIn text - same light grey
+  noStroke();
+  fill(isHovering ? lightGreyColor : color(240, 240, 240, 150));
+  text("LinkedIn Profile", linkedinX, height - 20);
+  
+  // Handle click
+  if (isHovering && mouseIsPressed) {
+    window.open('https://www.linkedin.com/in/sunnyhaladker/', '_blank');
+  }
+  
+  pop();
 }
