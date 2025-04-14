@@ -1,8 +1,8 @@
 let positions = [];
 let hue = 0;
 let symmetryCount = 12;
-let maxTrailLength = 50; // Increased for smoother trails
-let fadeSpeed = 8; // Reduced for smoother fading
+let maxTrailLength = 30; // Reduced from 50 to make trails shorter
+let fadeSpeed = 10; // Increased for slightly faster fading
 let currentShapeType = 0;
 const SHAPE_TYPES = ['triangle', 'circle', 'square', 'star', 'flower'];
 let shapeChangeTimer = 0;
@@ -11,7 +11,7 @@ let lastShapeType = 0;
 let transitionProgress = 1; // For shape transitioning
 let previousMouseX = 0;
 let previousMouseY = 0;
-let easing = 0.2; // For smoother mouse movement
+let easing = 0.25; // Slightly increased for smoother mouse movement
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -107,7 +107,7 @@ function draw() {
   
   // Apply enhanced removal of old trail points with smoother fade
   let currentTime = millis();
-  positions = positions.filter(p => currentTime - p.t < 3000); // Longer trail persistence
+  positions = positions.filter(p => currentTime - p.t < 2000); // Reduced from 3000 for shorter persistence
 }
 
 function drawMirrored(input, hue, shapeType) {
@@ -243,7 +243,7 @@ function drawTrails() {
   for (let i = 1; i < positions.length; i++) {
     // Calculate time-based opacity with smoother fade
     let age = millis() - positions[i].t;
-    let opacity = map(age, 0, 3000, 1, 0, true); // true enables easing
+    let opacity = map(age, 0, 2000, 1, 0, true); // Reduced from 3000 to match shorter persistence
     
     // Enhanced velocity calculation for smoother weight changes
     let timeDiff = positions[i].t - positions[i-1].t;
@@ -301,7 +301,7 @@ function drawTrails() {
     }
     
     // Occasionally draw the shape at points along the trail with transition effect
-    if (i % 6 == 0) {
+    if (i % 8 == 0) { // Changed from 6 to 8 to reduce number of shapes drawn along trail
       push();
       if (positions[i].transitionProgress < 1) {
         // Draw transitioning shapes
